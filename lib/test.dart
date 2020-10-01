@@ -1,35 +1,100 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
-class TextAnimation extends StatelessWidget {
+class TextAnimation extends StatefulWidget {
+  @override
+  _TextAnimationState createState() => _TextAnimationState();
+}
+
+class _TextAnimationState extends State<TextAnimation> {
+  int _side = 3;
+  double _redius = 50;
+  double _rotation = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomPaint(
-        painter: ShapePainter(),
-        child: Container(),
+      body: Column(
+        children: [
+          Expanded(
+            child: CustomPaint(
+              painter: ShapePainter(_redius, _side, _rotation),
+              child: Container(),
+            ),
+          ),
+          Text(
+            'sides ' + _side.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+          Slider(
+            value: _side.toDouble(),
+            max: 10,
+            label: _side.toString(),
+            divisions: 10,
+            onChanged: (value) {
+              setState(() {
+                _side = value.toInt();
+              });
+            },
+          ),
+          Text(
+            'redius ' + _redius.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+          Slider(
+            value: _redius,
+            max: 250,
+            onChanged: (value) {
+              setState(() {
+                _redius = value;
+              });
+            },
+          ),
+          Text(
+            'Rotation' + _rotation.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+          Slider(
+              value: _rotation,
+              min: 0,
+              max: 10,
+              onChanged: (value) {
+                setState(() {
+                  _rotation = value;
+                });
+              })
+        ],
       ),
     );
   }
 }
 
 class ShapePainter extends CustomPainter {
+  final double redius;
+  final int side;
+  final double rotation;
+  ShapePainter(this.redius, this.side, this.rotation);
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.white
+      ..color = Colors.teal
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    //Offset startingpoint = Offset(0, size.height / 2);
-    //Offset endPoint = Offset(size.width - 20, size.height / 2);
-    //Offset centerPoint = Offset(size.width / 2, size.height / 2);
     var path = Path();
-    //path.moveTo(20, size.height / 2);
-    //path.lineTo(size.width, size.height / 2);
-    //canvas.drawPath(path, paint);
-    path.addOval(Rect.fromCircle(
-        center: Offset(size.width / 2, size.height / 2), radius: 100));
+    var angle = (math.pi * 2) / side;
+    Offset center = Offset(size.width / 2, size.height / 2);
+
+    Offset startPoint =
+        Offset(redius * math.cos(rotation), redius * math.sin(rotation));
+
+    path.moveTo(startPoint.dx + center.dx, startPoint.dy + center.dy);
+
+    for (int i = 1; i <= side; i++) {
+      double dx = redius * math.cos(angle * i + rotation) + center.dx;
+      double dy = redius * math.sin(angle * i + rotation) + center.dy;
+      path.lineTo(dx, dy);
+    }
     canvas.drawPath(path, paint);
   }
 
