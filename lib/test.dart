@@ -6,10 +6,48 @@ class TextAnimation extends StatefulWidget {
   _TextAnimationState createState() => _TextAnimationState();
 }
 
-class _TextAnimationState extends State<TextAnimation> {
+class _TextAnimationState extends State<TextAnimation>
+    with TickerProviderStateMixin {
+  Animation<double> animation;
+  AnimationController controller;
+  Animation<double> rediusAnimation;
+  Tween<double> _rotationTween = Tween(begin: -math.pi, end: math.pi);
+  Tween<double> _rediusTween = Tween(begin: 0, end: 200);
   int _side = 3;
   double _redius = 50;
-  double _rotation = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+
+    animation = _rotationTween.animate(controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
+
+    rediusAnimation = _rediusTween.animate(controller)
+      ..addListener(() {})
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
+
+    controller.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +55,8 @@ class _TextAnimationState extends State<TextAnimation> {
         children: [
           Expanded(
             child: CustomPaint(
-              painter: ShapePainter(_redius, _side, _rotation),
+              painter:
+                  ShapePainter(rediusAnimation.value, _side, animation.value),
               child: Container(),
             ),
           ),
@@ -37,7 +76,7 @@ class _TextAnimationState extends State<TextAnimation> {
             },
           ),
           Text(
-            'redius ' + _redius.toString(),
+            'redius ' + rediusAnimation.value.toString(),
             style: TextStyle(color: Colors.white),
           ),
           Slider(
@@ -50,18 +89,9 @@ class _TextAnimationState extends State<TextAnimation> {
             },
           ),
           Text(
-            'Rotation' + _rotation.toString(),
+            'Rotation' + animation.value.toString(),
             style: TextStyle(color: Colors.white),
           ),
-          Slider(
-              value: _rotation,
-              min: 0,
-              max: 10,
-              onChanged: (value) {
-                setState(() {
-                  _rotation = value;
-                });
-              })
         ],
       ),
     );
