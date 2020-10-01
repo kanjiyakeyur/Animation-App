@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        canvasColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: TextAnimation(),
