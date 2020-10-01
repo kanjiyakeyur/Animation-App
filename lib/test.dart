@@ -26,17 +26,12 @@ class ShapePainter extends CustomPainter {
     Offset startingpoint = Offset(0, size.height / 2);
     Offset endPoint = Offset(size.width - 20, size.height / 2);
 
-    var path = Path();
-    path.moveTo(0, size.height / 2);
-    path.lineTo(size.width, size.height / 2);
-    canvas.drawPath(path, paint);
-
-    //canvas.drawLine(startingpoint, endPoint, paint);
+    canvas.drawLine(startingpoint, endPoint, paint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDeleget) {
-    return false;
+    return null;
   }
 }
 
