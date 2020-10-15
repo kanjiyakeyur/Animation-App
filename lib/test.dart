@@ -3,7 +3,8 @@ import 'dart:math' as math;
 
 class TextAnimation extends StatefulWidget {
   @override
-  _TextAnimationState createState() => _TextAnimationState();
+  _TextAnimationState createState() { _TextAnimationState()};
+  //for multiple line
 }
 
 class _TextAnimationState extends State<TextAnimation>
@@ -11,7 +12,7 @@ class _TextAnimationState extends State<TextAnimation>
   Animation<double> animation;
   AnimationController controller;
   Tween<double> _rotationTween = Tween(begin: -math.pi, end: math.pi);
-  double _redius = 100;
+  double _redius = 110;
 
   @override
   void initState() {
@@ -142,14 +143,4 @@ class ShapePainter extends CustomPainter {
   }
 }
 
-//class ShapePainter extends CustomPainter{
-//  @override
-//  void paint(Canvas canvas,Size size){
-//
-//  }
-//
-//  @override
-//  bool shouldRepaint(CustomPainter oldDeleget){
-//    return null;
-//  }
-//}
+
